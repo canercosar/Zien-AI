@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 import { getUserDetail, setUser } from "./userOperation.js"
 import { getCompanyDetail } from "./companyOperation.js"
+import { getCameraDetail } from "./cameraOperation.js"
 
 const firebaseConfig = {
   apiKey: "AIzaSyC9YvUI6EDGTcULTRAxiRmE3id1h6aezAQ",
@@ -23,8 +24,9 @@ if (userId) {
   console.log("Giriş yapan kullanıcının UID'si:", userId);
 
   let aCurrentUser = await getUserDetail(userId),
-  aCurrentUserCompanyDetail = await getCompanyDetail(aCurrentUser[0].companyCode),
-  aCurrentDepartman = aCurrentUserCompanyDetail[0].departments;
+    aCurrentUserCompanyDetail = await getCompanyDetail(aCurrentUser[0].companyCode),
+    aCurrentCameras = await getCameraDetail(aCurrentUser[0].companyCode, ""),
+    aCurrentDepartman = aCurrentUserCompanyDetail[0].departments;
 
   localStorage.setItem("currentUser", aCurrentUser);
   document.getElementById('userName').textContent = aCurrentUser[0].name + " " + aCurrentUser[0].surname;
@@ -33,35 +35,35 @@ if (userId) {
 
   document.getElementById('companyName').textContent = aCurrentUserCompanyDetail[0].companyName;
 
-// Dropdown menüyü dolduracak fonksiyon
-function populateDropdownMenu(items) {
+  // Dropdown menüyü dolduracak fonksiyon
+  populateDropdownMenu(items) => {
     const dropdownMenu = document.getElementById("dynamicDropdownMenu");
 
     // Her menü elemanını oluştur ve ekle
     items.forEach((item, index) => {
-        const menuItem = document.createElement("a");
-        menuItem.className = "dropdown-item";
-        menuItem.href = "#";
+      const menuItem = document.createElement("a");
+      menuItem.className = "dropdown-item";
+      menuItem.href = "#";
 
-        // İkon ve metni ekle
-        const icon = document.createElement("i");
-        icon.className = "mdi mdi-home-map-marker me-2 text-primary";
-        menuItem.appendChild(icon);
-        menuItem.appendChild(document.createTextNode(item.departmentName));
+      // İkon ve metni ekle
+      const icon = document.createElement("i");
+      icon.className = "mdi mdi-home-map-marker me-2 text-primary";
+      menuItem.appendChild(icon);
+      menuItem.appendChild(document.createTextNode(item.departmentName));
 
-        dropdownMenu.appendChild(menuItem);
+      dropdownMenu.appendChild(menuItem);
 
-        // Menü elemanları arasına ayraç ekle (sonuncusundan sonra değil)
-        if (index < items.length - 1) {
-            const divider = document.createElement("div");
-            divider.className = "dropdown-divider";
-            dropdownMenu.appendChild(divider);
-        }
+      // Menü elemanları arasına ayraç ekle (sonuncusundan sonra değil)
+      if (index < items.length - 1) {
+        const divider = document.createElement("div");
+        divider.className = "dropdown-divider";
+        dropdownMenu.appendChild(divider);
+      }
     });
-}
+  }
 
-// Dropdown menüyü doldur
-populateDropdownMenu(aCurrentDepartman);
+  // Dropdown menüyü doldur
+  populateDropdownMenu(aCurrentDepartman);
 
   if (!aCurrentUser.length > 0) {
     await setUser(userId);
