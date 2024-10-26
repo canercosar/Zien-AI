@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 
 // Firebase yapılandırma bilgilerini buraya ekleyin
 const firebaseConfig = {
@@ -14,16 +13,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
-
 const loginForm = document.getElementById("login-form");
 const modal = document.getElementById("statusErrorsModal");
 
-loginForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+loginForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
   
-  const email = document.getElementById("exampleInputEmail1").value;
-  const password = document.getElementById("exampleInputPassword1").value;
+  const email = document.getElementById("formInputEmail").value;
+  const password = document.getElementById("formInputPassword").value;
   
   try {
     // Kullanıcı girişi için Firebase kimlik doğrulama
@@ -41,7 +38,7 @@ loginForm.addEventListener("submit", async (e) => {
 });
 
 // Kullanıcı sayfanın herhangi bir yerine tıkladığında modalı kapat
-window.onclick = function(event) {
+window.onclick = (event) => {
   if (event.target == modal) {
     modal.style.display = "none";
   }
