@@ -28,8 +28,6 @@ if (userId) {
     localStorage.setItem("currentUser", aCurrentUser);
     document.getElementById('userName').textContent = aCurrentUser[0].name + " " + aCurrentUser[0].surname;
     document.getElementById('authName').textContent = aCurrentUser[0].title;
-    document.getElementById('name').textContent = aCurrentUser[0].name;
-
 
     document.getElementById('companyName').textContent = aCurrentUserCompanyDetail[0].companyName;
 
