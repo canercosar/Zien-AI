@@ -36,7 +36,7 @@ if (userId) {
   document.getElementById('companyName').textContent = aCurrentUserCompanyDetail[0].companyName;
 
   // Dropdown menüyü dolduracak fonksiyon
-  populateDropdownMenu(items) => {
+  function populateDropdownMenu(items) {
     const dropdownMenu = document.getElementById("dynamicDropdownMenu");
 
     // Her menü elemanını oluştur ve ekle
