@@ -20,15 +20,15 @@ const fnGetCameraDetail = async (sCompanyCode, sDepartment) => {
 	let queryDetail = query(
 		collection(db, "cameras"),
 		where("companyCode", "==", sCompanyCode),
-		where("department", "in", sDepartment)
+		// where("department", "==", sDepartment)
 	);
 	let querySnapshot = await getDocs(queryDetail);
 
 	querySnapshot.forEach((doc) => {
-		queryDetail.push(doc.data());
+		aCameras.push(doc.data());
 	});
 
-	return queryDetail;
+	return aCameras;
 };
 
 const fnGetUsers = async (oFiltered) => {

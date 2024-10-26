@@ -35,6 +35,10 @@ if (userId) {
 
   document.getElementById('companyName').textContent = aCurrentUserCompanyDetail[0].companyName;
 
+  document.getElementById('cameraCount').textContent = aCurrentCameras?.length;
+  document.getElementById('activeCameraCount').textContent = aCurrentCameras?.length;
+
+
   // Dropdown menüyü dolduracak fonksiyon
   function populateDropdownMenu(items) {
     const dropdownMenu = document.getElementById("dynamicDropdownMenu");
