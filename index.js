@@ -21,17 +21,15 @@ const userId = localStorage.getItem("userId");
 if (userId) {
   console.log("Giriş yapan kullanıcının UID'si:", userId);
 
-  try {
-    let aUserId = await getUserDetail(userId);
+    let aCurrentUser = await getUserDetail(userId);
+    localStorage.setItem("currentUser", aCurrentUser);
+    document.getElementById('userName').textContent = aCurrentUser[0].name + " " + aCurrentUser[0].surname;
+    document.getElementById('authName').textContent = aCurrentUser[0].title;
+    document.getElementById('name').textContent = aCurrentUser[0].name;
 
-    if (!aUserId.length > 0) {
+    if (!aCurrentUser.length > 0) {
       await setUser(userId);
     }
-  }
-
-  catch (oError) {
-    console.error("Veri Alınamadı ", oError);
-  }
 
   try {
     const q = query(collection(db, "companies"));
@@ -49,30 +47,6 @@ if (userId) {
 
 window.logout = () => {
   localStorage.removeItem('userId');
+  localStorage.removeItem('currentUser');
   window.location.href = "pages/login/login.html";
 };
-
-// const apiUrl = `https://us-central1-zienai.cloudfunctions.net/app/user`;
-// let loginUSer;
-// fetch(apiUrl)
-//     .then((response) => response.json())
-//     .then((data) => {
-//         loginUSer = data.filter(x => x.id === "7609YqCoSogmPxxrEh9v");
-//         localStorage.setItem('currentUser', JSON.stringify(loginUSer));
-//     })
-//     .catch((error) => {
-//         console.error("Veri alınamadı:", error);
-//     });
-
-// document.addEventListener('DOMContentLoaded', function () {
-//     // Yerel depodan kullanıcı bilgilerini al
-//     const currentUserJSON = localStorage.getItem('currentUser');
-//     if (currentUserJSON) {
-//         const currentUser = JSON.parse(currentUserJSON);
-
-//         // Kullanıcı bilgilerini HTML'e yerleştir
-//         document.getElementById('name').textContent = currentUser[0].name;
-//         document.getElementById('userName').textContent = currentUser[0].userName;
-//         document.getElementById('authName').textContent = currentUser[0].authName;
-//     }
-// });
