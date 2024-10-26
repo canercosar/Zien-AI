@@ -44,7 +44,7 @@ if (userId) {
     console.error("Veri Alınamadı ", e);
   }
 } else {
-  window.location.href = "pages/login/login.html";
+  // window.location.href = "pages/login/login.html";
 }
 
 window.logout = () => {

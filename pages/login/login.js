@@ -31,6 +31,7 @@ loginForm.addEventListener("submit", async (e) => {
     
     // Giriş başarılı
     window.location.href = "../../index.html";
+    localStorage.setItem("userId", userCredential.user.uid)
 
   } catch (error) {
     // errorMessage.innerText = `Kullanıcı Bilgileri Yanlış!`;
