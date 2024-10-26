@@ -2,6 +2,7 @@ import { getFirestore, collection, getDocs, addDoc, query, where, setDoc, doc } 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 import { getUserDetail, setUser } from "./userOperation.js"
+import { getCompanyDetail} from "./companyOperation.js"
 
 const firebaseConfig = {
   apiKey: "AIzaSyC9YvUI6EDGTcULTRAxiRmE3id1h6aezAQ",
