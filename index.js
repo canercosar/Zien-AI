@@ -23,10 +23,15 @@ if (userId) {
   console.log("Giriş yapan kullanıcının UID'si:", userId);
 
     let aCurrentUser = await getUserDetail(userId);
+    let aCurrentUserCompanyDetail = await getCompanyDetail(aCurrentUser[0].companyCode);
+
     localStorage.setItem("currentUser", aCurrentUser);
     document.getElementById('userName').textContent = aCurrentUser[0].name + " " + aCurrentUser[0].surname;
     document.getElementById('authName').textContent = aCurrentUser[0].title;
     document.getElementById('name').textContent = aCurrentUser[0].name;
+
+
+    document.getElementById('companyName').textContent = aCurrentUserCompanyDetail[0].companyName;
 
     if (!aCurrentUser.length > 0) {
       await setUser(userId);
