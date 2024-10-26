@@ -1,6 +1,8 @@
-import { getFirestore, collection, getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, query, where, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getAuth} from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+import { getUserDetail, setUser } from "./userOperation.js"
+
 const firebaseConfig = {
   apiKey: "AIzaSyC9YvUI6EDGTcULTRAxiRmE3id1h6aezAQ",
   authDomain: "zientech-161c4.firebaseapp.com",
@@ -20,11 +22,22 @@ if (userId) {
   console.log("Giriş yapan kullanıcının UID'si:", userId);
 
   try {
+    let aUserId = await getUserDetail(userId);
+
+    if (!aUserId.length > 0) {
+      await setUser(userId);
+    }
+  }
+
+  catch (oError) {
+    console.error("Veri Alınamadı ", oError);
+  }
+
+  try {
     const q = query(collection(db, "companies"));
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach((doc) => {
-      // console.log(`${doc.id} => ${doc.data().companyCode}`);
       console.log(doc.data());
     });
   } catch (e) {
@@ -34,7 +47,7 @@ if (userId) {
   window.location.href = "pages/login/login.html";
 }
 
-window.logout = function() {
+window.logout = () => {
   localStorage.removeItem('userId');
   window.location.href = "pages/login/login.html";
 };
