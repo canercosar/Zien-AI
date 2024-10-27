@@ -178,8 +178,8 @@
           </li>
           <div id="adminPages" style="display: none;">
             <span class="nav-link text-center">
-              <a class="nav-link" href="pages/admin/admin.html">
-              <button class="btn btn-block btn-lg btn-gradient-success mt-4">+ Uyarlama Yap</button>
+              <!-- <a class="nav-link" href="pages/admin/admin.html"> -->
+              <button class="btn btn-block btn-lg btn-gradient-success mt-4" onclick="loadContent('pages/bildirim/bildirim.html')">+ Uyarlama Yap</button>
             </span>
           </div>
           <li class="nav-item" id="samplePages" style="display: none;">
@@ -209,7 +209,7 @@
         </ul>
       </nav>
       <!-- partial -->
-      <div class="main-panel">
+      <div class="main-panel" id="main-content">
         <div class="content-wrapper">
           <!-- <div class="page-header">
               <h3 class="page-title">

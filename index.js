@@ -180,7 +180,7 @@ if (userId) {
   window.location.href = "pages/login/login.html";
 }
 
-function loadContent(page) {
+window.loadContent = (page) => {
   fetch(page)
       .then(response => {
           if (!response.ok) {
