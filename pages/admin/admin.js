@@ -1,27 +1,14 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 import { getUserDetail, setUser } from "../../userOperation.js"
 
-// Firebase yapılandırma bilgilerini buraya ekleyin
-const firebaseConfig = {
-  apiKey: "AIzaSyC9YvUI6EDGTcULTRAxiRmE3id1h6aezAQ",
-  authDomain: "zientech-161c4.firebaseapp.com",
-  projectId: "zientech-161c4",
-  storageBucket: "zientech-161c4.appspot.com",
-  messagingSenderId: "99032226847",
-  appId: "1:99032226847:web:8cad75113b4d77aff3c92a"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const userRegisterForm = document.getElementById("userRegisterFormId");
+const userCreateButton = document.getElementById("userCreateButtonId");
+const userUID = document.getElementById("InputFirebaseUID");
 const modal = document.getElementById("statusErrorsModal");
 
-userRegisterForm.addEventListener("submit", async (event) => {
+userCreateButton.addEventListener("click", async (event) => {
   event.preventDefault();
 
   let oUserDetail = {
-    assignDepartment: document.getElementById("InputAssingDepartmentId").value,
+    assignDepartment: document.getElementById("InputAssignDepartmentId").value,
     companyCode: document.getElementById("InputCompanyCodeId").value,
     name: document.getElementById("InputUsername").value,
     surname: document.getElementById("InputSurname").value,
@@ -29,17 +16,42 @@ userRegisterForm.addEventListener("submit", async (event) => {
     userLoginId: document.getElementById("InputFirebaseUID").value,
     userPhoto: document.getElementById("InputUserPhotoId").value,
     email: document.getElementById("InputEmail").value,
-    isAdmin: document.getElementById("InputFirebaseUID").value,
+    isAdmin: document.getElementById("CheckBoxIsAdminId").checked
   };
-
 
   try {
     await setUser(oUserDetail);
+    const statusSuccessModal = new bootstrap.Modal(document.getElementById('statusSuccessModalUser'));
+    statusSuccessModal?.show();
   } catch (error) {
   }
 });
 
-// Kullanıcı sayfanın herhangi bir yerine tıkladığında modalı kapat
+
+userUID.addEventListener("change", async (event) => {
+  event.preventDefault();
+
+  let sUserUID = document.getElementById("InputFirebaseUID").value;
+  if (sUserUID !== "") {
+    try {
+      let aUsers = await getUserDetail(sUserUID),
+        oUser = aUsers[0];
+
+      document.getElementById("InputAssignDepartmentId").value = oUser.assignDepartment;
+      document.getElementById("InputCompanyCodeId").value = oUser.companyCode;
+      document.getElementById("InputUsername").value = oUser.name;
+      document.getElementById("InputSurname").value = oUser.surname;
+      document.getElementById("InputUserTitleId").value = oUser.title;
+      document.getElementById("InputUserPhotoId").value = oUser.userPhoto;
+      document.getElementById("InputEmail").value = oUser.email;
+      document.getElementById("CheckBoxIsAdminId").checked = oUser.isAdmin;
+
+    } catch (error) {
+    }
+  }
+
+});
+
 window.onclick = (event) => {
   if (event.target == modal) {
     modal.style.display = "none";

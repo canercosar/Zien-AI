@@ -283,13 +283,7 @@
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="page-header">
-            <h3 class="page-title"> Form elements </h3>
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Forms</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Form elements</li>
-              </ol>
-            </nav>
+            <h3 class="page-title"> Admin page </h3>
           </div>
           <div class="row">
             <div class="col-md-12 grid-margin stretch-card">
@@ -335,8 +329,36 @@
                       <label class="form-check-label">
                         <input id="CheckBoxIsAdminId" type="checkbox" class="form-check-input">Is Admin? </label>
                     </div>
+                    <button id="userCreateButtonId" class="btn btn-gradient-danger btn-fw btn-lg font-weight-medium auth-form-btn btn-rounded"
+                      type="submit">Create User</button>
+                    <button class="btn btn-light">Cancel</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Register Company Form</h4>
+                  <form id="companyRegisterFormId" class="forms-sample">
+                    <div class="form-group">
+                      <label for="InputCompanyCode">Company Code</label>
+                      <input type="text" class="form-control" id="InputCompanyCode" placeholder="Company Code">
+                    </div>
+                    <div class="form-group">
+                      <label for="InputCompanyName">Company Name</label>
+                      <input type="text" class="form-control" id="InputCompanyName" placeholder="Surname">
+                    </div>
+                    <div class="form-group">
+                      <label for="InputCompanyAdress">Adress</label>
+                      <input type="text" class="form-control" id="InputCompanyAdress" placeholder="Adress">
+                    </div>
+                    <div class="form-group">
+                      <label for="InputDepartment">Department</label>
+                      <input type="text" class="form-control" id="InputDepartment" placeholder="Department">
+                    </div>
                     <button class="btn btn-gradient-danger btn-fw btn-lg font-weight-medium auth-form-btn btn-rounded"
-                    type="submit">Login</button>
+                      type="submit">Company Code Create</button>
                     <button class="btn btn-light">Cancel</button>
                   </form>
                 </div>
@@ -357,6 +379,52 @@
       <!-- main-panel ends -->
     </div>
     <!-- page-body-wrapper ends -->
+  </div>
+  <div class="container  p-5">
+    <div class="row">
+      <div class="modal fade" id="statusSuccessModalUser" tabindex="-1" role="dialog" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+          <div class="modal-content">
+            <div class="modal-body text-center p-lg-4">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                <circle class="path circle" fill="none" stroke="#198754" stroke-width="6" stroke-miterlimit="10"
+                  cx="65.1" cy="65.1" r="62.1" />
+                <polyline class="path check" fill="none" stroke="#198754" stroke-width="6" stroke-linecap="round"
+                  stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+              </svg>
+
+              <h4 class="text-danger mt-3">Kullanıcı başarıyla yaratıldı/güncellendi.</h4>
+
+              <button type="button" class="btn btn-sm mt-3 btn-danger" data-bs-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container  p-5">
+    <div class="row">
+      <div class="modal fade" id="statusSuccessModalCompany" tabindex="-1" role="dialog" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+          <div class="modal-content">
+            <div class="modal-body text-center p-lg-4">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                <circle class="path circle" fill="none" stroke="#198754" stroke-width="6" stroke-miterlimit="10"
+                  cx="65.1" cy="65.1" r="62.1" />
+                <polyline class="path check" fill="none" stroke="#198754" stroke-width="6" stroke-linecap="round"
+                  stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+              </svg>
+
+              <h4 class="text-danger mt-3">Şirket kodu yaratıldı/güncellendi.</h4>
+
+              <button type="button" class="btn btn-sm mt-3 btn-danger" data-bs-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- container-scroller -->
   <!-- plugins:js -->
