@@ -31,7 +31,6 @@ loginForm.addEventListener("submit", async (event) => {
     localStorage.setItem("userId", userCredential.user.uid)
 
   } catch (error) {
-    // errorMessage.innerText = `Kullanıcı Bilgileri Yanlış!`;
     const statusErrorsModal = new bootstrap.Modal(document.getElementById('statusErrorsModal'));
     statusErrorsModal.show();
   }

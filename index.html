@@ -268,72 +268,29 @@
             </div>
             <div class="row">
               <div class="col-12 grid-margin">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Kamera Statüleri</h4>
-                    <div class="table-responsive">
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th> Kamera </th>
-                            <th> Konum </th>
-                            <th> Durum </th>
-                            <th> Son Aktivite </th>
-                            <th> Kamera ID </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <img src="assets/images/faces/camera.jpg" class="me-2" alt="image"> 
-                            </td>
-                            <td> ODA-2 </td>
-                            <td>
-                              <label class="badge badge-gradient-success">AKTİF</label>
-                            </td>
-                            <td> Dec 5, 2017 </td>
-                            <td> WD-12345 </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <img src="assets/images/faces/camera.jpg" class="me-2" alt="image"> 
-                            </td>
-                            <td> ODA-3 </td>
-                            <td>
-                              <label class="badge badge-gradient-warning">ERİŞİLEMİYOR</label>
-                            </td>
-                            <td> Dec 12, 2017 </td>
-                            <td> WD-12346 </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <img src="assets/images/faces/camera.jpg" class="me-2" alt="image"> 
-                            </td>
-                            <td> ODA-5 </td>
-                            <td>
-                              <label class="badge badge-gradient-info">BEKLEMEDE</label>
-                            </td>
-                            <td> Dec 16, 2017 </td>
-                            <td> WD-12347 </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <img src="assets/images/faces/camera.jpg" class="me-2" alt="image"> 
-                            </td>
-                            <td> ODA-6 </td>
-                            <td>
-                              <label class="badge badge-gradient-danger">KAPALI</label>
-                            </td>
-                            <td> Dec 3, 2017 </td>
-                            <td> WD-12348 </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                  <div class="card">
+                      <div class="card-body">
+                          <h4 class="card-title">Kamera Statüleri</h4>
+                          <div class="table-responsive">
+                              <table class="table">
+                                  <thead>
+                                      <tr>
+                                          <th> Kamera RTSP </th>
+                                          <th> Şirket Kodu </th>
+                                          <th> Departman </th>
+                                          <th> RTSP Kullanıcısı </th>
+                                          <th> RTSP Parola </th>
+                                      </tr>
+                                  </thead>
+                                  <tbody id="cameraTableBody">
+                                      <!-- Dinamik olarak doldurulacak -->
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
                   </div>
-                </div>
               </div>
-            </div>
+          </div>
             <div class="row">
               <div class="col-md-7 grid-margin stretch-card">
                 <div class="card">
@@ -370,6 +327,27 @@
         <!-- main-panel ends -->
       </div>
       <!-- page-body-wrapper ends -->
+    </div>
+    <div class="container  p-5">
+      <div class="row">
+        <div class="modal fade" id="initErrorsModal" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false"> 
+          <div class="modal-dialog modal-dialog-centered modal-sm" role="document"> 
+            <div class="modal-content"> 
+              <div class="modal-body text-center p-lg-4"> 
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                  <circle class="path circle" fill="none" stroke="#db3646" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1" /> 
+                  <line class="path line" fill="none" stroke="#db3646" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3" />
+                  <line class="path line" fill="none" stroke="#db3646" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" x1="95.8" y1="38" X2="34.4" y2="92.2" /> 
+                </svg> 
+                <h4 class="text-danger mt-3">Yetki Hatası!</h4> 
+                <p class="mt-3">Verileri Görüntülemek İçin Yetkiniz Bulunmamaktadır!</p>
+                <a href="#" class="nav-link">Bizimle iletişime geçin</a>
+                <!-- <button type="button" class="btn btn-sm mt-3 btn-danger" data-bs-dismiss="modal">Ok</button>  -->
+              </div> 
+            </div> 
+          </div> 
+        </div>
+      </div>
     </div>
     <!-- container-scroller -->
     <!-- plugins:js -->

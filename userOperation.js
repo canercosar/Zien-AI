@@ -15,26 +15,37 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+
 const fnGetUserDetail = async (sUserId) => {
 	let aUsers = [];
 	let queryDetail = query(collection(db, "users"), where("userLoginId", "==", sUserId));
-	let querySnapshot = await getDocs(queryDetail);
+	try {
+		let querySnapshot = await getDocs(queryDetail);
 
-	querySnapshot.forEach((doc) => {
-		aUsers.push(doc.data());
-	});
+		querySnapshot.forEach((doc) => {
+			aUsers.push(doc.data());
+		});
 
-	return aUsers;
+		return aUsers;
+	} catch (error) {
+		console.log("HATA!" + error)
+		const statusErrorsModal = new bootstrap.Modal(document.getElementById('initErrorsModal'));
+		statusErrorsModal.show();
+	}
 };
 
 const fnGetUsers = async (oFiltered) => {
 	let aUsers = [];
 	let queryDetail = query(collection(db, "users"));
-	let querySnapshot = await getDocs(queryDetail);
+	try {
+		let querySnapshot = await getDocs(queryDetail);
 
-	querySnapshot.forEach((doc) => {
-		aUsers.push(doc.data());
-	});
+		querySnapshot.forEach((doc) => {
+			aUsers.push(doc.data());
+		});
+	} catch (error) {
+		console.log("HATA!" + error)
+	}
 
 	return aUsers;
 };
