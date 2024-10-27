@@ -38,11 +38,29 @@ if (userId) {
   document.getElementById('cameraCount').textContent = aCurrentCameras?.length;
   document.getElementById('activeCameraCount').textContent = aCurrentCameras?.length;
 
+  if(aCurrentUser[0].userPhoto !== ""){
+    document.getElementById("profilePhotoDiv").style.display = "inline";
+  }else{
+    document.getElementById("profilePhotoDiv").style.display = "none";
+
+  }
+  if (aCurrentUser[0].isAdmin) {
+    // Admin rozetini görünür yapın
+    document.getElementById("adminBadge").style.display = "inline";
+    document.getElementById("adminPages").style.display = "inline";
+    document.getElementById("samplePages").style.display = "inline";
+} else {
+    // Admin değilse gizli kalsın
+    document.getElementById("adminBadge").style.display = "none";
+    document.getElementById("adminPages").style.display = "none";
+    document.getElementById("samplePages").style.display = "none";
+}
+
 
   // Dropdown menüyü dolduracak fonksiyon
   function populateDropdownMenu(items) {
     const dropdownMenu = document.getElementById("dynamicDropdownMenu");
-
+    if(items){
     // Her menü elemanını oluştur ve ekle
     items.forEach((item, index) => {
       const menuItem = document.createElement("a");
@@ -64,6 +82,9 @@ if (userId) {
         dropdownMenu.appendChild(divider);
       }
     });
+  }else{
+
+  }
   }
 
   function getStatusBadge(status) {
@@ -87,7 +108,7 @@ if (userId) {
     tableBody.innerHTML = ""; // Önceden olan verileri temizler
 
     cameras.forEach(camera => {
-      const department = departments.find(dep => dep.departmentName === camera.department);
+      const department = departments[0].departments.find(dep => dep.departmentId === camera.department);
 
       if (department) {
         camera.departmentId = department.departmentId;
@@ -120,7 +141,7 @@ if (userId) {
       row.appendChild(companyCodeCell);
 
       const departmentCell = document.createElement("td");
-      departmentCell.textContent = camera.department;
+      departmentCell.textContent = camera.department + " (" + camera.departmentName + ")";
       row.appendChild(departmentCell);
 
       const rtspUserCell = document.createElement("td");
@@ -157,6 +178,22 @@ if (userId) {
   // }
 } else {
   window.location.href = "pages/login/login.html";
+}
+
+function loadContent(page) {
+  fetch(page)
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('İçerik yüklenemedi');
+          }
+          return response.text();
+      })
+      .then(data => {
+          document.getElementById("main-content").innerHTML = data;
+      })
+      .catch(error => {
+          document.getElementById("main-content").innerHTML = "<p>İçerik yüklenemedi: " + error.message + "</p>";
+      });
 }
 
 window.logout = () => {
