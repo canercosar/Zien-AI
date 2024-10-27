@@ -24,9 +24,9 @@ if (userId) {
   console.log("Giriş yapan kullanıcının UID'si:", userId);
 
   let aCurrentUser = await getUserDetail(userId),
-    aCurrentUserCompanyDetail = await getCompanyDetail(aCurrentUser[0].companyCode),
-    aCurrentCameras = await getCameraDetail(aCurrentUser[0].companyCode, ""),
-    aCurrentDepartman = aCurrentUserCompanyDetail[0].departments;
+    aCurrentUserCompanyDetail = await getCompanyDetail(aCurrentUser[0]?.companyCode),
+    aCurrentCameras = await getCameraDetail(aCurrentUser[0]?.companyCode, ""),
+    aCurrentDepartman = aCurrentUserCompanyDetail[0]?.departments;
 
   localStorage.setItem("currentUser", aCurrentUser);
   document.getElementById('userName').textContent = aCurrentUser[0].name + " " + aCurrentUser[0].surname;

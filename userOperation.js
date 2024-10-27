@@ -50,15 +50,8 @@ const fnGetUsers = async (oFiltered) => {
 	return aUsers;
 };
 
-const fnSetUser = async (sUserDetail) => {
-	let oUserDetail = {
-		"name": "",//Düşünülecek
-		"surname": "",
-		"userLoginId": sUserDetail,
-
-	};
-
-	await setDoc(doc(db, "users", sUserDetail), oUserDetail);
+const fnSetUser = async (oUserDetail) => {
+    await setDoc(doc(db, "users", oUserDetail.userLoginId), oUserDetail);
 };
 
 export { fnGetUserDetail as getUserDetail, fnSetUser as setUser, fnGetUsers as getUsers }
