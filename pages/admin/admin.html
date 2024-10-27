@@ -329,7 +329,8 @@
                       <label class="form-check-label">
                         <input id="CheckBoxIsAdminId" type="checkbox" class="form-check-input">Is Admin? </label>
                     </div>
-                    <button id="userCreateButtonId" class="btn btn-gradient-danger btn-fw btn-lg font-weight-medium auth-form-btn btn-rounded"
+                    <button id="userCreateButtonId"
+                      class="btn btn-gradient-danger btn-fw btn-lg font-weight-medium auth-form-btn btn-rounded"
                       type="submit">Create User</button>
                     <button class="btn btn-light">Cancel</button>
                   </form>
@@ -355,7 +356,19 @@
                     </div>
                     <div class="form-group">
                       <label for="InputDepartment">Department</label>
-                      <input type="text" class="form-control" id="InputDepartment" placeholder="Department">
+                      <div id="multiInputContainerDepartment" class="form-control"
+                        style="display: flex; flex-wrap: wrap; gap: 5px; min-height: 38px; padding: 5px;">
+                        <input type="text" id="InputDepartment" placeholder="Department"
+                          style="flex: 1; min-width: 100px; border: none; outline: none;">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="InputDepartmentName">Department Name</label>
+                      <div id="multiInputContainerDepartmentName" class="form-control"
+                        style="display: flex; flex-wrap: wrap; gap: 5px; min-height: 38px; padding: 5px;">
+                        <input type="text" id="InputDepartmentName" placeholder="Department"
+                          style="flex: 1; min-width: 100px; border: none; outline: none;">
+                      </div>
                     </div>
                     <button class="btn btn-gradient-danger btn-fw btn-lg font-weight-medium auth-form-btn btn-rounded"
                       type="submit">Company Code Create</button>

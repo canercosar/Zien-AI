@@ -27,6 +27,53 @@ userCreateButton.addEventListener("click", async (event) => {
   }
 });
 
+const multiInputContainerDepartment = document.getElementById('multiInputContainerDepartment');
+const multiInputContainerDepartmentName = document.getElementById('multiInputContainerDepartmentName');
+const inputFieldDepartment = document.getElementById('InputDepartment');
+const inputFieldDepartmentName = document.getElementById('InputDepartmentName');
+
+// Fonksiyon: Etiket Ekle
+function addTag(text, inputField, multiInputContainer) {
+  const tag = document.createElement('span');
+  tag.classList.add('tag');
+  tag.textContent = text;
+  tag.style.cssText = 'padding: 5px; background-color: #e0e0e0; border-radius: 5px; margin-right: 5px;';
+
+  const closeButton = document.createElement('span');
+  closeButton.textContent = ' x';
+  closeButton.style.cssText = 'margin-left: 5px; cursor: pointer;';
+
+  closeButton.addEventListener('click', () => {
+    multiInputContainer.removeChild(tag);
+  });
+
+  tag.appendChild(closeButton);
+  multiInputContainer.insertBefore(tag, inputField);
+}
+
+// Olay Dinleyici: Enter veya Virgül Tuşu ile Değer Ekle
+inputFieldDepartment.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' || event.key === ',') {
+    event.preventDefault();
+    const text = inputFieldDepartment.value.trim();
+    if (text) {
+      addTag(text, inputFieldDepartment, multiInputContainerDepartment);
+      inputFieldDepartment.value = ''; // Giriş alanını temizle
+    }
+  }
+});
+
+inputFieldDepartmentName.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' || event.key === ',') {
+    event.preventDefault();
+    const text = inputFieldDepartmentName.value.trim();
+    if (text) {
+      addTag(text, inputFieldDepartmentName, multiInputContainerDepartmentName);
+      inputFieldDepartmentName.value = ''; // Giriş alanını temizle
+    }
+  }
+});
+
 
 userUID.addEventListener("change", async (event) => {
   event.preventDefault();
