@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDocs, query, where, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, where, setDoc, doc, addDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
@@ -39,15 +39,11 @@ const fnGetUsers = async (oFiltered) => {
 	return aUsers;
 };
 
-const fnSetUser = async (sUserDetail) => {
-	let oUserDetail = {
-		"name": "",//Düşünülecek
-		"surname": "",
-		"userLoginId": sUserDetail,
+const fnSetCompany = async (oCompany) => {
+	// await setDoc(doc(db, "companies", oCompany.companyCode), oCompany);
+	// const docRef = await addDoc(collection(db, "companies"), oCompany);
 
-	};
-
-	await setDoc(doc(db, "users", sUserDetail), oUserDetail);
+	await addDoc(collection(db, "companies"), oCompany);
 };
 
-export { fnGetCompanyDetail as getCompanyDetail }
+export { fnGetCompanyDetail as getCompanyDetail, fnSetCompany as setCompany }

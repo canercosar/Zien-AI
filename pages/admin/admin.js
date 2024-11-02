@@ -1,11 +1,25 @@
 import { getUserDetail, setUser } from "../../userOperation.js"
+import { getCompanyDetail, setCompany } from "../../companyOperation.js"
 
-const userCreateButton = document.getElementById("userCreateButtonId");
-const userUID = document.getElementById("InputFirebaseUID");
+// const userCreateButton = document.getElementById("userCreateButtonId");
+// const userUID = document.getElementById("InputFirebaseUID");
 const modal = document.getElementById("statusErrorsModal");
 
-userCreateButton.addEventListener("click", async (event) => {
+
+const multiInputContainerDepartment = document.getElementById('multiInputContainerDepartment');
+const multiInputContainerDepartmentName = document.getElementById('multiInputContainerDepartmentName');
+const inputFieldDepartment = document.getElementById('InputDepartment');
+const inputFieldDepartmentName = document.getElementById('InputDepartmentName');
+
+async function onSaveUser(event) {
   event.preventDefault();
+
+  // Form verilerini al
+  // const form = document.getElementById("userRegisterFormId");
+  // const formData = new FormData(form);
+
+  // // FormData'dan bir nesneye dönüştür
+  // const oUserDetailobject = Object.fromEntries(formData.entries());
 
   let oUserDetail = {
     assignDepartment: document.getElementById("InputAssignDepartmentId").value,
@@ -25,15 +39,95 @@ userCreateButton.addEventListener("click", async (event) => {
     statusSuccessModal?.show();
   } catch (error) {
   }
-});
+}
 
-const multiInputContainerDepartment = document.getElementById('multiInputContainerDepartment');
-const multiInputContainerDepartmentName = document.getElementById('multiInputContainerDepartmentName');
-const inputFieldDepartment = document.getElementById('InputDepartment');
-const inputFieldDepartmentName = document.getElementById('InputDepartmentName');
+async function onSaveCompanyCode(event) {
+  event.preventDefault();
+
+  let aDepartments = getDepartmentTags(),
+    aDepartmentsName = getDepartmentNameTags();
+
+  if (aDepartments.length !== aDepartmentsName.length) {
+    //Department sayısı tutarsız uyarısı ver.
+  }
+
+  let oCompany = {
+    "adress": document.getElementById("InputCompanyAdress").value,
+    "companyCode": document.getElementById("InputCompanyCode").value,
+    "companyName": document.getElementById("InputCompanyName").value,
+    "departments": []
+  };
+
+  for (let index = 0; index < aDepartments.length; index++) {
+    const sDepartment = aDepartments[index];
+
+    oCompany.departments.push({
+      departmentId: sDepartment,
+      departmentName: aDepartmentsName[index]
+    });
+  }
+
+  try {
+    await setCompany(oCompany);
+    // const statusSuccessModal = new bootstrap.Modal(document.getElementById('statusSuccessModalCompany'));
+    // statusSuccessModal?.show();
+  } catch (error) {
+    console.log(error);
+  }
+
+
+}
+
 
 // Fonksiyon: Etiket Ekle
-function addTag(text, inputField, multiInputContainer) {
+// function addTag(text, inputField, multiInputContainer) {
+//   const tag = document.createElement('span');
+//   tag.classList.add('tag');
+//   tag.textContent = text;
+//   tag.style.cssText = 'padding: 5px; background-color: #e0e0e0; border-radius: 5px; margin-right: 5px;';
+
+//   const closeButton = document.createElement('span');
+//   closeButton.textContent = ' x';
+//   closeButton.style.cssText = 'margin-left: 5px; cursor: pointer;';
+
+//   closeButton.addEventListener('click', () => {
+//     multiInputContainer.removeChild(tag);
+//   });
+
+//   tag.appendChild(closeButton);
+//   multiInputContainer.insertBefore(tag, inputField);
+// }
+
+
+// async function onKeydownDepartment(event) {
+//   if (event.key === 'Enter' || event.key === ',') {
+//     event.preventDefault();
+//     const text = inputFieldDepartment.value.trim();
+//     if (text) {
+//       addTag(text, inputFieldDepartment, multiInputContainerDepartment);
+//       inputFieldDepartment.value = '';
+//     }
+//   }
+// }
+
+// async function onKeydownDepartmentName(event) {
+//   if (event.key === 'Enter' || event.key === ',') {
+//     event.preventDefault();
+//     const text = inputFieldDepartmentName.value.trim();
+//     if (text) {
+//       addTag(text, inputFieldDepartmentName, multiInputContainerDepartmentName);
+//       inputFieldDepartmentName.value = '';
+//     }
+//   }
+// }
+
+
+// Tüm etiketleri depolamak için bir dizi tanımlayın
+let departmentTags = [];
+let departmentNameTags = [];
+
+// Etiket ekleme fonksiyonu
+function addTag(text, inputField, multiInputContainer, tagsArray) {
   const tag = document.createElement('span');
   tag.classList.add('tag');
   tag.textContent = text;
@@ -45,37 +139,55 @@ function addTag(text, inputField, multiInputContainer) {
 
   closeButton.addEventListener('click', () => {
     multiInputContainer.removeChild(tag);
+    // Diziden etiketi kaldırın
+    const index = tagsArray.indexOf(text);
+    if (index !== -1) {
+      tagsArray.splice(index, 1);
+    }
   });
 
   tag.appendChild(closeButton);
   multiInputContainer.insertBefore(tag, inputField);
+
+  // Etiketi diziye ekleyin
+  tagsArray.push(text);
 }
 
-// Olay Dinleyici: Enter veya Virgül Tuşu ile Değer Ekle
-inputFieldDepartment.addEventListener('keydown', (event) => {
+// Departman etiketi eklerken çağrılan fonksiyon
+async function onKeydownDepartment(event) {
   if (event.key === 'Enter' || event.key === ',') {
     event.preventDefault();
     const text = inputFieldDepartment.value.trim();
     if (text) {
-      addTag(text, inputFieldDepartment, multiInputContainerDepartment);
-      inputFieldDepartment.value = ''; // Giriş alanını temizle
+      addTag(text, inputFieldDepartment, multiInputContainerDepartment, departmentTags);
+      inputFieldDepartment.value = '';
     }
   }
-});
+}
 
-inputFieldDepartmentName.addEventListener('keydown', (event) => {
+// Departman adı etiketi eklerken çağrılan fonksiyon
+async function onKeydownDepartmentName(event) {
   if (event.key === 'Enter' || event.key === ',') {
     event.preventDefault();
     const text = inputFieldDepartmentName.value.trim();
     if (text) {
-      addTag(text, inputFieldDepartmentName, multiInputContainerDepartmentName);
-      inputFieldDepartmentName.value = ''; // Giriş alanını temizle
+      addTag(text, inputFieldDepartmentName, multiInputContainerDepartmentName, departmentNameTags);
+      inputFieldDepartmentName.value = '';
     }
   }
-});
+}
+
+// Etiketleri okuma fonksiyonu
+function getDepartmentTags() {
+  return departmentTags;
+}
+
+function getDepartmentNameTags() {
+  return departmentNameTags;
+}
 
 
-userUID.addEventListener("change", async (event) => {
+async function onChangeUserUID(event) {
   event.preventDefault();
 
   let sUserUID = document.getElementById("InputFirebaseUID").value;
@@ -96,8 +208,13 @@ userUID.addEventListener("change", async (event) => {
     } catch (error) {
     }
   }
+}
 
-});
+window.onSaveCompanyCode = onSaveCompanyCode;
+window.onKeydownDepartment = onKeydownDepartment;
+window.onKeydownDepartmentName = onKeydownDepartmentName;
+window.onSaveUser = onSaveUser;
+window.onChangeUserUID = onChangeUserUID;
 
 window.onclick = (event) => {
   if (event.target == modal) {
