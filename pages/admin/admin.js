@@ -1,11 +1,8 @@
 import { getUserDetail, setUser } from "../../userOperation.js"
 import { getCompanyDetail, setCompany } from "../../companyOperation.js"
+import { getCameraDetail, setCamera } from "../../cameraOperation.js"
 
-// const userCreateButton = document.getElementById("userCreateButtonId");
-// const userUID = document.getElementById("InputFirebaseUID");
 const modal = document.getElementById("statusErrorsModal");
-
-
 const multiInputContainerDepartment = document.getElementById('multiInputContainerDepartment');
 const multiInputContainerDepartmentName = document.getElementById('multiInputContainerDepartmentName');
 const inputFieldDepartment = document.getElementById('InputDepartment');
@@ -13,13 +10,6 @@ const inputFieldDepartmentName = document.getElementById('InputDepartmentName');
 
 async function onSaveUser(event) {
   event.preventDefault();
-
-  // Form verilerini al
-  // const form = document.getElementById("userRegisterFormId");
-  // const formData = new FormData(form);
-
-  // // FormData'dan bir nesneye dönüştür
-  // const oUserDetailobject = Object.fromEntries(formData.entries());
 
   let oUserDetail = {
     assignDepartment: document.getElementById("InputAssignDepartmentId").value,
@@ -69,58 +59,13 @@ async function onSaveCompanyCode(event) {
 
   try {
     await setCompany(oCompany);
-    // const statusSuccessModal = new bootstrap.Modal(document.getElementById('statusSuccessModalCompany'));
-    // statusSuccessModal?.show();
+    const statusSuccessModal = new bootstrap.Modal(document.getElementById('statusSuccessModalUser'));
+    statusSuccessModal?.show();
   } catch (error) {
     console.log(error);
   }
 
-
 }
-
-
-// Fonksiyon: Etiket Ekle
-// function addTag(text, inputField, multiInputContainer) {
-//   const tag = document.createElement('span');
-//   tag.classList.add('tag');
-//   tag.textContent = text;
-//   tag.style.cssText = 'padding: 5px; background-color: #e0e0e0; border-radius: 5px; margin-right: 5px;';
-
-//   const closeButton = document.createElement('span');
-//   closeButton.textContent = ' x';
-//   closeButton.style.cssText = 'margin-left: 5px; cursor: pointer;';
-
-//   closeButton.addEventListener('click', () => {
-//     multiInputContainer.removeChild(tag);
-//   });
-
-//   tag.appendChild(closeButton);
-//   multiInputContainer.insertBefore(tag, inputField);
-// }
-
-
-// async function onKeydownDepartment(event) {
-//   if (event.key === 'Enter' || event.key === ',') {
-//     event.preventDefault();
-//     const text = inputFieldDepartment.value.trim();
-//     if (text) {
-//       addTag(text, inputFieldDepartment, multiInputContainerDepartment);
-//       inputFieldDepartment.value = '';
-//     }
-//   }
-// }
-
-// async function onKeydownDepartmentName(event) {
-//   if (event.key === 'Enter' || event.key === ',') {
-//     event.preventDefault();
-//     const text = inputFieldDepartmentName.value.trim();
-//     if (text) {
-//       addTag(text, inputFieldDepartmentName, multiInputContainerDepartmentName);
-//       inputFieldDepartmentName.value = '';
-//     }
-//   }
-// }
-
 
 // Tüm etiketleri depolamak için bir dizi tanımlayın
 let departmentTags = [];
@@ -177,7 +122,6 @@ async function onKeydownDepartmentName(event) {
   }
 }
 
-// Etiketleri okuma fonksiyonu
 function getDepartmentTags() {
   return departmentTags;
 }
@@ -185,7 +129,6 @@ function getDepartmentTags() {
 function getDepartmentNameTags() {
   return departmentNameTags;
 }
-
 
 async function onChangeUserUID(event) {
   event.preventDefault();
@@ -210,6 +153,26 @@ async function onChangeUserUID(event) {
   }
 }
 
+async function onSaveCamera(event) {
+  event.preventDefault();
+
+  let oCamera = {
+    companyCode: document.getElementById("InputCompanyCodeForCamera").value,
+    department: document.getElementById("InputDepartmentForCamera").value,
+    rtsp: document.getElementById("InputRTSP").value,
+    rtspUser: document.getElementById("InputRTSPUser").value,
+    rtspPassword: document.getElementById("InputRTSPPassword").value
+  };
+
+  try {
+    await setCamera(oCamera);
+    const statusSuccessModal = new bootstrap.Modal(document.getElementById('statusSuccessModalUser'));
+    statusSuccessModal?.show();
+  } catch (error) {
+  }
+}
+
+window.onSaveCamera = onSaveCamera;
 window.onSaveCompanyCode = onSaveCompanyCode;
 window.onKeydownDepartment = onKeydownDepartment;
 window.onKeydownDepartmentName = onKeydownDepartmentName;

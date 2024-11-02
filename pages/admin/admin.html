@@ -94,6 +94,40 @@
         </div>
       </div>
     </div>
+
+    <!-- Camera Operation -->
+    <div class="col-md-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Register Camera Form</h4>
+          <form class="forms-sample">
+            <div class="form-group">
+              <label for="InputCompanyCodeForCamera">Company Code</label>
+              <input type="text" class="form-control" id="InputCompanyCodeForCamera" placeholder="Company Code">
+            </div>
+            <div class="form-group">
+              <label for="InputDepartmentForCamera">Department Id</label>
+              <input type="text" class="form-control" id="InputDepartmentForCamera" placeholder="Department Id">
+            </div>
+            <div class="form-group">
+              <label for="InputRTSP">RTSP</label>
+              <input type="text" class="form-control" id="InputRTSP" placeholder="RTSP">
+            </div>
+            <div class="form-group">
+              <label for="InputRTSPUser">RTSP User</label>
+              <input type="text" class="form-control" id="InputRTSPUser" placeholder="RTSP User">
+            </div>
+            <div class="form-group">
+              <label for="InputRTSPPassword">RTSP Password</label>
+              <input type="text" class="form-control" id="InputRTSPPassword" placeholder="RTSP Password">
+            </div>
+            <button onclick="onSaveCamera(event)"
+              class="btn btn-gradient-danger btn-fw btn-lg font-weight-medium auth-form-btn btn-rounded"
+              type="button">Camera Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -110,9 +144,7 @@
               <polyline class="path check" fill="none" stroke="#198754" stroke-width="6" stroke-linecap="round"
                 stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
             </svg>
-
-            <h4 class="text-danger mt-3">Kullanıcı başarıyla yaratıldı/güncellendi.</h4>
-
+            <h4 class="text-danger mt-3">Kayıt başarıyla yaratıldı/güncellendi.</h4>
             <button type="button" class="btn btn-sm mt-3 btn-danger" data-bs-dismiss="modal">OK</button>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDocs, query, where, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, where, setDoc, doc, addDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
@@ -17,11 +17,10 @@ const db = getFirestore(app);
 
 const fnGetCameraDetail = async (sCompanyCode, sDepartment) => {
 	let aCameras = [];
-	let queryDetail = query(
-		collection(db, "cameras"),
-		where("companyCode", "==", sCompanyCode),
-		// where("department", "==", sDepartment)
-	);
+	let queryDetail =
+		query(collection(db, "cameras"),
+			where("companyCode", "==", sCompanyCode)
+		);
 	let querySnapshot = await getDocs(queryDetail);
 
 	querySnapshot.forEach((doc) => {
@@ -31,27 +30,8 @@ const fnGetCameraDetail = async (sCompanyCode, sDepartment) => {
 	return aCameras;
 };
 
-const fnGetUsers = async (oFiltered) => {
-	let aUsers = [];
-	let queryDetail = query(collection(db, "users"));
-	let querySnapshot = await getDocs(queryDetail);
-
-	querySnapshot.forEach((doc) => {
-		aUsers.push(doc.data());
-	});
-
-	return aUsers;
+const fnSetCamera = async (oCameraDetail) => {
+	await addDoc(collection(db, "cameras"), oCameraDetail);
 };
 
-const fnSetUser = async (sUserDetail) => {
-	let oUserDetail = {
-		"name": "",//Düşünülecek
-		"surname": "",
-		"userLoginId": sUserDetail,
-
-	};
-
-	await setDoc(doc(db, "users", sUserDetail), oUserDetail);
-};
-
-export { fnGetCameraDetail as getCameraDetail }
+export { fnGetCameraDetail as getCameraDetail, fnSetCamera as setCamera }
