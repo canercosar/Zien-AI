@@ -1,12 +1,9 @@
 import { getFirestore, collection, getDocs, addDoc, query, where, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
-import { getUserDetail, setUser } from "./userOperation.js"
-import { getCompanyDetail } from "./companyOperation.js"
-import { getCameraDetail } from "./cameraOperation.js"
-import { populateCameraTable } from "./kamera.js"
-import { populateCameraTablePage } from './pages/kameralar/cameraPage.js';
-const loadingOverlay = document.getElementById('loading');
+import { getUserDetail, setUser } from "../../userOperation.js"
+import { getCompanyDetail } from "../../companyOperation.js"
+import { getCameraDetail } from "../../cameraOperation.js"
 
 const firebaseConfig = {
   apiKey: "AIzaSyC9YvUI6EDGTcULTRAxiRmE3id1h6aezAQ",
@@ -23,13 +20,13 @@ const user = auth.currentUser;
 const db = getFirestore(app);
 const userId = localStorage.getItem("userId");
 
-let aCurrentCameras, aCurrentUserCompanyDetail;
-
 if (userId) {
-  let aCurrentUser = await getUserDetail(userId);
-    aCurrentUserCompanyDetail = await getCompanyDetail(aCurrentUser[0]?.companyCode);
-    aCurrentCameras = await getCameraDetail(aCurrentUser[0]?.companyCode, "");
-  let  aCurrentDepartman = aCurrentUserCompanyDetail[0]?.departments;
+  console.log("Giriş yapan kullanıcının UID'si:", userId);
+
+  let aCurrentUser = await getUserDetail(userId),
+    aCurrentUserCompanyDetail = await getCompanyDetail(aCurrentUser[0]?.companyCode),
+    aCurrentCameras = await getCameraDetail(aCurrentUser[0]?.companyCode, ""),
+    aCurrentDepartman = aCurrentUserCompanyDetail[0]?.departments;
 
   localStorage.setItem("currentUser", aCurrentUser);
   document.getElementById('userName').textContent = aCurrentUser[0].name + " " + aCurrentUser[0].surname;
@@ -105,6 +102,61 @@ if (userId) {
     }
   }
 
+  // Tabloyu dolduracak fonksiyon
+  function populateCameraTable(cameras, departments) {
+    const tableBody = document.getElementById("cameraTableBody");
+    tableBody.innerHTML = ""; // Önceden olan verileri temizler
+
+    cameras.forEach(camera => {
+      const department = departments[0].departments.find(dep => dep.departmentId === camera.department);
+
+      if (department) {
+        camera.departmentId = department.departmentId;
+        camera.departmentName = department.departmentName;
+      }
+      const row = document.createElement("tr");
+
+      // Konum Hücresi
+      const rtspCell = document.createElement("td");
+      const rtspLink = document.createElement("a");
+
+      // Bağlantı özelliklerini ayarla
+      rtspLink.href = camera.rtsp;           // RTSP bağlantısını `href` özelliğine atar
+      rtspLink.textContent = camera.rtsp; // Gösterilecek metin
+      rtspLink.target = "_blank";            // Yeni sekmede açmak için
+
+      rtspCell.appendChild(rtspLink);
+      row.appendChild(rtspCell);
+
+      // Durum Hücresi
+      // const statusCell = document.createElement("td");
+      // // const statusLabel = document.createElement("label");
+      // // statusLabel.className = getStatusBadge(camera.department);
+      // statusLabel.textContent = camera.department;
+      // statusCell.appendChild(statusLabel);
+      // row.appendChild(statusCell);
+
+      const companyCodeCell = document.createElement("td");
+      companyCodeCell.textContent = camera.companyCode + " (" + departments[0].companyName + ")";
+      row.appendChild(companyCodeCell);
+
+      const departmentCell = document.createElement("td");
+      departmentCell.textContent = camera.department + " (" + camera.departmentName + ")";
+      row.appendChild(departmentCell);
+
+      const rtspUserCell = document.createElement("td");
+      rtspUserCell.textContent = camera.rtspUser;
+      row.appendChild(rtspUserCell);
+
+      const rtspUserPassCell = document.createElement("td");
+      rtspUserPassCell.textContent = camera.rtspPassword;
+      row.appendChild(rtspUserPassCell);
+
+      tableBody.appendChild(row);
+    });
+  }
+
+  // Tabloyu doldur
   populateCameraTable(aCurrentCameras, aCurrentUserCompanyDetail);
 
   // Dropdown menüyü doldur
@@ -119,63 +171,14 @@ if (userId) {
   //   const querySnapshot = await getDocs(q);
 
   //   querySnapshot.forEach((doc) => {
-  //    
+  //     // console.log(doc.data());
   //   });
   // } catch (e) {
   //   console.error("Veri Alınamadı ", e);
   // }
-  loadingOverlay.style.display = 'none';
 } else {
   window.location.href = "pages/login/login.html";
 }
-
-window.loadContent = (page) => {
-  fetch(page)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('İçerik yüklenemedi');
-      }
-      return response.text();
-    })
-    .then(data => {
-      const loadingOverlay = document.getElementById('loading');
-      loadingOverlay.style.display = 'flex';
-      setTimeout(() => {
-      const mainContent = document.getElementById("main-content");
-      mainContent.innerHTML = data;
-      const scriptSrc = page.replace('.html', '.js');
-      const existingScript = document.getElementById("dynamic-script");
-      if (existingScript) {
-        existingScript.remove();
-      }
-      const script = document.createElement("script");
-      script.src = scriptSrc;
-      script.type = "module";
-      script.id = "dynamic-script";
-      script.onload = () =>{
-        populateCameraTablePage(aCurrentCameras, aCurrentUserCompanyDetail);
-      }
-      document.body.appendChild(script);
-      const links = document.querySelectorAll('.nav-link');
-
-      // Tüm nav-link'lerden active sınıfını kaldır
-      links.forEach(link => {
-          link.classList.remove('activeLinkC');
-      });
-  
-      // Aktif olan linke active sınıfını ekle
-      const activeLink = Array.from(links).find(link => link.getAttribute('onclick')?.includes(page));
-      if (activeLink) {
-          activeLink.classList.add('activeLinkC');
-      }
-      loadingOverlay.style.display = 'none';
-    }, 300);
-    })
-    .catch(error => {
-      document.getElementById("main-content").innerHTML = "<p>İçerik yüklenemedi: " + error.message + "</p>";
-    });
-};
-
 
 window.logout = () => {
   localStorage.removeItem('userId');

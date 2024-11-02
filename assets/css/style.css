@@ -11303,7 +11303,7 @@ code {
 
 /* Footer */
 .footer {
-  background: #f2edf3;
+  /* background: #f2edf3; */
   color: color(dark);
   border-top: 1px solid #e7dee9;
   padding: 30px 1rem;
@@ -12932,10 +12932,15 @@ code {
 
 /* Cards */
 .card {
+  border-radius: 10px;
   border: 0;
   background: #fff; }
   .card .card-body {
-    padding: 2.5rem 2.5rem; }
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 30px rgba(8,7,16,0.4);
+    padding: 2.5rem 2.5rem; 
+  }
     .card .card-body + .card-body {
       padding-top: 1rem; }
   .card .card-title {
@@ -13694,7 +13699,11 @@ dl {
 /* === Landing screens === */
 /* Auth */
 .auth .auth-form-light {
-  background: #ffffff; }
+  border-radius: 10px;
+  background: #ffffff; 
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 40px rgba(8,7,16,0.6);}
   .auth .auth-form-light select {
     color: #c9c8c8; }
   .auth .auth-form-light .input-group .form-control:focus, .auth .auth-form-light .input-group .form-control:active {
@@ -14106,6 +14115,7 @@ dl {
 
 /* Sidebar */
 .sidebar {
+  
   min-height: calc(100vh - 70px);
   background: #ffffff;
   font-family: "ubuntu-regular", sans-serif;
@@ -14126,7 +14136,7 @@ dl {
     flex-direction: column;
     margin-bottom: 60px; }
     .sidebar .nav .nav-item {
-      padding: 0 2.25rem;
+      padding: 0 1.25rem;
       -webkit-transition-duration: 0.25s;
       transition-duration: 0.25s;
       transition-property: background;
@@ -14188,13 +14198,13 @@ dl {
           margin-left: 1rem; }
         .sidebar .nav .nav-item .nav-link[aria-expanded="true"] .menu-arrow:before {
           content: "\f140"; }
-      .sidebar .nav .nav-item.active {
-        background: #ffffff; }
-        .sidebar .nav .nav-item.active > .nav-link .menu-title {
+      /* .sidebar .nav .nav-item.active {
+        background: #ffffff; } */
+        /* .sidebar .nav .nav-item.active > .nav-link .menu-title {
           color: #f44336;
           font-family: "ubuntu-medium", sans-serif; }
         .sidebar .nav .nav-item.active > .nav-link i {
-          color: #f44336; }
+          color: #f44336; } */
       .sidebar .nav .nav-item:hover {
         background: #fcfcfc; }
       .sidebar .nav .nav-item.nav-profile .nav-link {
@@ -14269,6 +14279,10 @@ dl {
           background: transparent; }
 
 /* style for off-canvas menu*/
+.sidebarFixedC {
+  position: fixed;
+}
+
 @media screen and (max-width: 991px) {
   .sidebar-offcanvas {
     position: fixed;
@@ -14440,11 +14454,50 @@ dl {
       width: 100%; } }
 
 .content-wrapper {
-  background: #f2edf3;
+  /* background: #f2edf3; */
   padding: 2.75rem 2.25rem;
   width: 100%;
   -webkit-box-flex: 1;
   -ms-flex-positive: 1;
   flex-grow: 1; }
+
+  .login-background {
+    background-image: url('../images/20529598.jpg'); /* Görselin yolunu burada belirtin */
+    background-size: cover; /* Görselin tüm sayfayı kaplamasını sağlar */
+    background-repeat: no-repeat; /* Görselin tekrar etmesini önler */
+    background-position: center; /* Görseli ortalar */
+  }
+
+  .activeLinkC {
+    color: #f44336 !important;
+    font-weight: bold; 
+}
+.loading-overlay {
+  position: fixed; /* Ekranın üzerine yerleştirmek için */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8); /* Arka plan rengi */
+  display: flex; /* Flexbox ile ortalama */
+  justify-content: center; /* Yatayda ortalama */
+  align-items: center; /* Dikeyde ortalama */
+  z-index: 1000; /* Diğer öğelerin üzerinde görünmesi için yüksek z-index */
+  display: flex; /* Başlangıçta gizli */
+}
+
+.spinner {
+  border: 8px solid #f3f3f3; /* Dış daire rengi */
+  border-top: 8px solid #3498db; /* Üst daire rengi */
+  border-radius: 50%; /* Daire şeklinde yapmak için */
+  width: 50px; /* Dairenin genişliği */
+  height: 50px; /* Dairenin yüksekliği */
+  animation: spin 2s linear infinite; /* Döner animasyon */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 /*# sourceMappingURL=style.css.map */
