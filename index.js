@@ -17,6 +17,47 @@ const firebaseConfig = {
   appId: "1:99032226847:web:8cad75113b4d77aff3c92a"
 };
 
+const messaging = firebase.messaging();
+
+// İzin iste ve token al
+Notification.requestPermission().then((permission) => {
+  if (permission === 'granted') {
+    console.log('Notification permission granted.');
+    messaging.getToken({ applicationServerKey: 'BETB9VQsjY3lanuUe3rU19PgHFKoDFJ7OFcv7kNVyYnGcdlV9Ci8ye2An7b_2RnX1gO5SNs0MwBzrF232g-xMzQ' }).then((currentToken) => {
+      if (currentToken) {
+        console.log('Current token for client: ', currentToken);
+        // Token'ı kullan (örneğin konsola yazdır)
+        // Burada token'ı başka bir yere göndermek veya kaydetmek için kullanabilirsin
+      } else {
+        console.log('No registration token available. Request permission to generate one.');
+      }
+    }).catch((err) => {
+      console.error(err);
+    });
+  } else {
+    console.log('Unable to get permission to notify.');
+  }
+});
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./firebase-messaging-sw.js')
+    .then((registration) => {
+      console.log('Service worker registered:', registration);
+    })
+    .catch((error) => {
+      console.error('Error registering service worker:', error);
+    });
+
+}
+
+messaging.onMessage((payload) => {
+  const alertSound = document.getElementById("alertSound");
+  alertSound.play();
+  const modal = document.getElementById("fireAlertModal");
+  const firePhoto = document.getElementById("firePhoto");
+
+  firePhoto.src = payload.data.imageUrl;
+  modal.style.display = "block";
+});
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const user = auth.currentUser;
@@ -27,9 +68,9 @@ let aCurrentCameras, aCurrentUserCompanyDetail;
 
 if (userId) {
   let aCurrentUser = await getUserDetail(userId);
-    aCurrentUserCompanyDetail = await getCompanyDetail(aCurrentUser[0]?.companyCode);
-    aCurrentCameras = await getCameraDetail(aCurrentUser[0]?.companyCode, "");
-  let  aCurrentDepartman = aCurrentUserCompanyDetail[0]?.departments;
+  aCurrentUserCompanyDetail = await getCompanyDetail(aCurrentUser[0]?.companyCode);
+  aCurrentCameras = await getCameraDetail(aCurrentUser[0]?.companyCode, "");
+  let aCurrentDepartman = aCurrentUserCompanyDetail[0]?.departments;
 
   localStorage.setItem("currentUser", aCurrentUser);
   document.getElementById('userName').textContent = aCurrentUser[0].name + " " + aCurrentUser[0].surname;
@@ -141,41 +182,50 @@ window.loadContent = (page) => {
       const loadingOverlay = document.getElementById('loading');
       loadingOverlay.style.display = 'flex';
       setTimeout(() => {
-      const mainContent = document.getElementById("main-content");
-      mainContent.innerHTML = data;
-      const scriptSrc = page.replace('.html', '.js');
-      const existingScript = document.getElementById("dynamic-script");
-      if (existingScript) {
-        existingScript.remove();
-      }
-      const script = document.createElement("script");
-      script.src = scriptSrc;
-      script.type = "module";
-      script.id = "dynamic-script";
-      script.onload = () =>{
-        populateCameraTablePage(aCurrentCameras, aCurrentUserCompanyDetail);
-      }
-      document.body.appendChild(script);
-      const links = document.querySelectorAll('.nav-link');
+        const mainContent = document.getElementById("main-content");
+        mainContent.innerHTML = data;
+        const scriptSrc = page.replace('.html', '.js');
+        const existingScript = document.getElementById("dynamic-script");
+        if (existingScript) {
+          existingScript.remove();
+        }
+        const script = document.createElement("script");
+        script.src = scriptSrc;
+        script.type = "module";
+        script.id = "dynamic-script";
+        script.onload = () => {
+          populateCameraTablePage(aCurrentCameras, aCurrentUserCompanyDetail);
+        }
+        document.body.appendChild(script);
+        const links = document.querySelectorAll('.nav-link');
 
-      // Tüm nav-link'lerden active sınıfını kaldır
-      links.forEach(link => {
+        // Tüm nav-link'lerden active sınıfını kaldır
+        links.forEach(link => {
           link.classList.remove('activeLinkC');
-      });
-  
-      // Aktif olan linke active sınıfını ekle
-      const activeLink = Array.from(links).find(link => link.getAttribute('onclick')?.includes(page));
-      if (activeLink) {
+        });
+
+        // Aktif olan linke active sınıfını ekle
+        const activeLink = Array.from(links).find(link => link.getAttribute('onclick')?.includes(page));
+        if (activeLink) {
           activeLink.classList.add('activeLinkC');
-      }
-      loadingOverlay.style.display = 'none';
-    }, 300);
+        }
+        loadingOverlay.style.display = 'none';
+      }, 300);
     })
     .catch(error => {
       document.getElementById("main-content").innerHTML = "<p>İçerik yüklenemedi: " + error.message + "</p>";
     });
 };
 
+function closeModal(choice) {
+  if (choice) {
+    alert("Evet seçildi.");
+  } else {
+    alert("Hayır seçildi.");
+  }
+  document.getElementById("fireAlertModal").style.display = "none";
+  document.getElementById("alertSound").pause();
+}
 
 window.logout = () => {
   localStorage.removeItem('userId');
