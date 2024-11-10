@@ -53,11 +53,14 @@ if (userId) {
   let oCurrentUser = aSystemTokens.find(x => x.userLoginId === aCurrentUser[0]?.userLoginId,);
 
   //aSystemTokens içindeki FCM Token'da userId unique olmalı ve bu id'nin duplicate olma durumunda güncelleme yapmalı
+  let sBrand =  navigator.userAgentData.brands.map(item => item.brand).join(', ');
 
   if (!oCurrentToken) {
     aSystemTokens.push({
       "FCMToken": notificationHandler._currentTokenFCM,
-      "userLoginId": aCurrentUser[0]?.userLoginId
+      "userLoginId": aCurrentUser[0]?.userLoginId,
+      "brandDetails":sBrand,
+      "platform": navigator.userAgentData.platform
     });
 
     aCurrentUserCompanyDetail[0].userFCMTokens = aSystemTokens;
@@ -73,7 +76,9 @@ if (userId) {
       // Aynı userLoginId'ye sahip öğe zaten varsa FCMToken'ı güncelle
       let existing = acc.find(item => item.userLoginId === curr.userLoginId);
       if (existing) {
-        existing.FCMToken = _currentTokenFCM;  // Yeni token'ı yazıyoruz
+        existing.FCMToken = notificationHandler._currentTokenFCM;  // Yeni token'ı yazıyoruz
+        existing.brandDetails = sBrand;
+        existing.platform = navigator.userAgentData.platform;
       } else {
         acc.push(curr);  // Eğer duplicate yoksa, öğeyi ekliyoruz
       }
