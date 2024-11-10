@@ -1,43 +1,20 @@
-import { getFirestore, collection, getDocs, addDoc, query, where, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 import { getUserDetail, setUser } from "./userOperation.js"
-import { getCompanyDetail } from "./companyOperation.js"
+import { getCompanyDetail, updateCompany } from "./companyOperation.js"
 import { getCameraDetail } from "./cameraOperation.js"
 import { populateCameraTable } from "./kamera.js"
 import { populateCameraTablePage } from './pages/kameralar/cameraPage.js';
+
+import { app, auth, db } from './firebaseConfig.js'; // Firebase yapılandırma dosyasını import et
+import { NotificationHandler } from './notificationHandler.js'; // Bildirim handler'ı import et
+
 const loadingOverlay = document.getElementById('loading');
-
-const firebaseConfig = {
-  apiKey: "AIzaSyC9YvUI6EDGTcULTRAxiRmE3id1h6aezAQ",
-  authDomain: "zientech-161c4.firebaseapp.com",
-  projectId: "zientech-161c4",
-  storageBucket: "zientech-161c4.appspot.com",
-  messagingSenderId: "99032226847",
-  appId: "1:99032226847:web:8cad75113b4d77aff3c92a"
-};
-
 const messaging = firebase.messaging();
+let _currentTokenFCM;
 
-// İzin iste ve token al
-Notification.requestPermission().then((permission) => {
-  if (permission === 'granted') {
-    console.log('Notification permission granted.');
-    messaging.getToken({ applicationServerKey: 'BETB9VQsjY3lanuUe3rU19PgHFKoDFJ7OFcv7kNVyYnGcdlV9Ci8ye2An7b_2RnX1gO5SNs0MwBzrF232g-xMzQ' }).then((currentToken) => {
-      if (currentToken) {
-        console.log('Current token for client: ', currentToken);
-        // Token'ı kullan (örneğin konsola yazdır)
-        // Burada token'ı başka bir yere göndermek veya kaydetmek için kullanabilirsin
-      } else {
-        console.log('No registration token available. Request permission to generate one.');
-      }
-    }).catch((err) => {
-      console.error(err);
-    });
-  } else {
-    console.log('Unable to get permission to notify.');
-  }
-});
+// Sınıfın bir örneğini oluşturun ve metodu çağırın
+const notificationHandler = new NotificationHandler();
+notificationHandler.requestNotificationPermission();
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./firebase-messaging-sw.js')
     .then((registration) => {
@@ -58,10 +35,9 @@ messaging.onMessage((payload) => {
   firePhoto.src = payload.data.imageUrl;
   modal.style.display = "block";
 });
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+
+
 const user = auth.currentUser;
-const db = getFirestore(app);
 const userId = localStorage.getItem("userId");
 
 let aCurrentCameras, aCurrentUserCompanyDetail;
@@ -71,6 +47,46 @@ if (userId) {
   aCurrentUserCompanyDetail = await getCompanyDetail(aCurrentUser[0]?.companyCode);
   aCurrentCameras = await getCameraDetail(aCurrentUser[0]?.companyCode, "");
   let aCurrentDepartman = aCurrentUserCompanyDetail[0]?.departments;
+
+  let aSystemTokens = aCurrentUserCompanyDetail[0].userFCMTokens?.length > 0 ? aCurrentUserCompanyDetail[0].userFCMTokens : [];
+  let oCurrentToken = aSystemTokens.find(x => x.FCMToken === notificationHandler._currentTokenFCM);
+  let oCurrentUser = aSystemTokens.find(x => x.userLoginId === aCurrentUser[0]?.userLoginId,);
+
+  //aSystemTokens içindeki FCM Token'da userId unique olmalı ve bu id'nin duplicate olma durumunda güncelleme yapmalı
+
+  if (!oCurrentToken) {
+    aSystemTokens.push({
+      "FCMToken": notificationHandler._currentTokenFCM,
+      "userLoginId": aCurrentUser[0]?.userLoginId
+    });
+
+    aCurrentUserCompanyDetail[0].userFCMTokens = aSystemTokens;
+
+    updateCompany({
+      ...aCurrentUserCompanyDetail[0]
+    });
+  }
+
+  if (oCurrentUser) {
+    // userLoginId'ye göre filtreleme ve FCMToken'ı güncelleme
+    let filteredTokens = aSystemTokens.reduce((acc, curr) => {
+      // Aynı userLoginId'ye sahip öğe zaten varsa FCMToken'ı güncelle
+      let existing = acc.find(item => item.userLoginId === curr.userLoginId);
+      if (existing) {
+        existing.FCMToken = _currentTokenFCM;  // Yeni token'ı yazıyoruz
+      } else {
+        acc.push(curr);  // Eğer duplicate yoksa, öğeyi ekliyoruz
+      }
+      return acc;
+    }, []);
+
+    aCurrentUserCompanyDetail[0].userFCMTokens = filteredTokens;
+
+    updateCompany({
+      ...aCurrentUserCompanyDetail[0]
+    });
+
+  }
 
   localStorage.setItem("currentUser", aCurrentUser);
   document.getElementById('userName').textContent = aCurrentUser[0].name + " " + aCurrentUser[0].surname;
@@ -155,16 +171,6 @@ if (userId) {
     await setUser(userId);
   }
 
-  // try {
-  //   const q = query(collection(db, "companies"));
-  //   const querySnapshot = await getDocs(q);
-
-  //   querySnapshot.forEach((doc) => {
-  //    
-  //   });
-  // } catch (e) {
-  //   console.error("Veri Alınamadı ", e);
-  // }
   loadingOverlay.style.display = 'none';
 } else {
   window.location.href = "pages/login/login.html";
