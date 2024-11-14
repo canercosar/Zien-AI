@@ -62,7 +62,7 @@ async function onSaveCompanyCode(event) {
     const statusSuccessModal = new bootstrap.Modal(document.getElementById('statusSuccessModalUser'));
     statusSuccessModal?.show();
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 
 }

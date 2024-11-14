@@ -1,7 +1,7 @@
 const userId = localStorage.getItem("userId");
 
 if (userId) {
-  console.log("Giriş yapan kullanıcının UID'si:", userId);
+  // console.log("Giriş yapan kullanıcının UID'si:", userId);
 } else {
   window.location.href = "pages/samples/login.html";
 }

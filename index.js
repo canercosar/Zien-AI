@@ -1,9 +1,10 @@
 import { getUserDetail, setUser } from "./userOperation.js"
 import { getCompanyDetail, updateCompany } from "./companyOperation.js"
 import { getCameraDetail } from "./cameraOperation.js"
+import { getNotifDetail } from "./notificationOperation.js"
 import { populateCameraTable } from "./kamera.js"
 import { populateCameraTablePage } from './pages/kameralar/cameraPage.js';
-
+import { NotifTablePage } from './pages/bildirim/bildirim.js';
 import { app, auth, db } from './firebaseConfig.js'; // Firebase yapılandırma dosyasını import et
 import { NotificationHandler } from './notificationHandler.js'; // Bildirim handler'ı import et
 
@@ -18,10 +19,10 @@ notificationHandler.requestNotificationPermission();
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./firebase-messaging-sw.js')
     .then((registration) => {
-      console.log('Service worker registered:', registration);
+      // console.log('Service worker registered:', registration);
     })
     .catch((error) => {
-      console.error('Error registering service worker:', error);
+      // console.error('Error registering service worker:', error);
     });
 
 }
@@ -40,12 +41,13 @@ messaging.onMessage((payload) => {
 const user = auth.currentUser;
 const userId = localStorage.getItem("userId");
 
-let aCurrentCameras, aCurrentUserCompanyDetail;
+let aCurrentCameras, aCurrentUserCompanyDetail, aCurrentLogs;
 
 if (userId) {
   let aCurrentUser = await getUserDetail(userId);
   aCurrentUserCompanyDetail = await getCompanyDetail(aCurrentUser[0]?.companyCode);
   aCurrentCameras = await getCameraDetail(aCurrentUser[0]?.companyCode, "");
+  aCurrentLogs = await getNotifDetail(aCurrentUser[0]?.companyCode, "");
   let aCurrentDepartman = aCurrentUserCompanyDetail[0]?.departments;
 
   let aSystemTokens = aCurrentUserCompanyDetail[0].userFCMTokens?.length > 0 ? aCurrentUserCompanyDetail[0].userFCMTokens : [];
@@ -53,13 +55,13 @@ if (userId) {
   let oCurrentUser = aSystemTokens.find(x => x.userLoginId === aCurrentUser[0]?.userLoginId,);
 
   //aSystemTokens içindeki FCM Token'da userId unique olmalı ve bu id'nin duplicate olma durumunda güncelleme yapmalı
-  let sBrand =  navigator.userAgentData.brands.map(item => item.brand).join(', ');
+  let sBrand = navigator.userAgentData.brands.map(item => item.brand).join(', ');
 
   if (!oCurrentToken) {
     aSystemTokens.push({
       "FCMToken": notificationHandler._currentTokenFCM,
       "userLoginId": aCurrentUser[0]?.userLoginId,
-      "brandDetails":sBrand,
+      "brandDetails": sBrand,
       "platform": navigator.userAgentData.platform
     });
 
@@ -206,6 +208,7 @@ window.loadContent = (page) => {
         script.id = "dynamic-script";
         script.onload = () => {
           populateCameraTablePage(aCurrentCameras, aCurrentUserCompanyDetail);
+          NotifTablePage(aCurrentLogs);
         }
         document.body.appendChild(script);
         const links = document.querySelectorAll('.nav-link');
@@ -227,6 +230,47 @@ window.loadContent = (page) => {
       document.getElementById("main-content").innerHTML = "<p>İçerik yüklenemedi: " + error.message + "</p>";
     });
 };
+
+function fetchNotifications(notifications) {
+  const sortedNotifications = notifications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  const recentNotifications = sortedNotifications.slice(0, 3);
+
+  const notificationList = document.getElementById("notificationList");
+  notificationList.innerHTML = "";
+
+  recentNotifications.forEach((notif) => {
+    const listItem = document.createElement("a");
+    listItem.classList.add("dropdown-item", "preview-item");
+
+    listItem.innerHTML = `
+      <div >
+        <img src="${notif.imageUrl}" alt="Notification Image" style="width: 40px; height: auto;">
+      </div>
+      <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+        <h6 class="preview-subject font-weight-normal mb-1">Yangın Bildirimi!</h6>
+        <p class="text-gray ellipsis mb-0"> Şirket Kodu: ${notif.companyCode} </p>
+      </div>
+    `;
+
+    notificationList.appendChild(listItem);
+    const divider = document.createElement("div");
+    divider.classList.add("dropdown-divider");
+    notificationList.appendChild(divider);
+  });
+}
+
+fetchNotifications(aCurrentLogs);
+
+window.toggleBellIcon = () => {
+  const icon = document.getElementById("notificationIcon");
+  if (icon.classList.contains("mdi-bell-outline")) {
+    icon.classList.remove("mdi-bell-outline");
+    icon.classList.add("mdi-bell");
+  } else {
+    icon.classList.remove("mdi-bell");
+    icon.classList.add("mdi-bell-outline");
+  }
+}
 
 function closeModal(choice) {
   if (choice) {

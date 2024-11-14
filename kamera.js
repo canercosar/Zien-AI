@@ -39,13 +39,13 @@ function populateCameraTable(cameras, departments) {
     departmentCell.textContent = camera.department + " (" + camera.departmentName + ")";
     row.appendChild(departmentCell);
 
-    const rtspUserCell = document.createElement("td");
-    rtspUserCell.textContent = camera.rtspUser;
-    row.appendChild(rtspUserCell);
+    // const rtspUserCell = document.createElement("td");
+    // rtspUserCell.textContent = camera.rtspUser;
+    // row.appendChild(rtspUserCell);
 
-    const rtspUserPassCell = document.createElement("td");
-    rtspUserPassCell.textContent = camera.rtspPassword;
-    row.appendChild(rtspUserPassCell);
+    // const rtspUserPassCell = document.createElement("td");
+    // rtspUserPassCell.textContent = camera.rtspPassword;
+    // row.appendChild(rtspUserPassCell);
 
     tableBody.appendChild(row);
   });

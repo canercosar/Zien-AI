@@ -21,7 +21,7 @@ const db = getFirestore(app);
 const userId = localStorage.getItem("userId");
 
 if (userId) {
-  console.log("Giriş yapan kullanıcının UID'si:", userId);
+  // console.log("Giriş yapan kullanıcının UID'si:", userId);
 
   let aCurrentUser = await getUserDetail(userId),
     aCurrentUserCompanyDetail = await getCompanyDetail(aCurrentUser[0]?.companyCode),

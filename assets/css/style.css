@@ -12621,14 +12621,14 @@ code {
 
 .btn-gradient-warning {
   background: -webkit-gradient(linear, left top, right top, from(#f6e384), to(#ffd500));
-  background: linear-gradient(to right, #f6e384, #ffd500);
+  background: linear-gradient(to right, #0e47af, #0eeda5);
   border: 0;
   -webkit-transition: opacity 0.3s ease;
   transition: opacity 0.3s ease; }
   .btn-gradient-warning:not([disabled]):not(.disabled):active, .btn-gradient-warning:not([disabled]):not(.disabled).active,
   .show > .btn-gradient-warning.dropdown-toggle {
     background: -webkit-gradient(linear, left top, right top, from(#f6e384), to(#ffd500));
-    background: linear-gradient(to right, #f6e384, #ffd500); }
+    background: linear-gradient(to right, #0e47af, #0eeda5); }
   .btn-gradient-warning:hover {
     opacity: .8; }
   .btn-gradient-warning:not(.btn-gradient-light) {
@@ -12638,14 +12638,14 @@ code {
 
 .btn-gradient-danger {
   background: -webkit-gradient(linear, left top, right top, from(#ffbf96), to(#fe7096));
-  background: linear-gradient(to right, #ffbf96, #fe7096);
+  background: linear-gradient(to right, #e38b52, #ed0342);
   border: 0;
   -webkit-transition: opacity 0.3s ease;
   transition: opacity 0.3s ease; }
   .btn-gradient-danger:not([disabled]):not(.disabled):active, .btn-gradient-danger:not([disabled]):not(.disabled).active,
   .show > .btn-gradient-danger.dropdown-toggle {
     background: -webkit-gradient(linear, left top, right top, from(#ffbf96), to(#fe7096));
-    background: linear-gradient(to right, #ffbf96, #fe7096); }
+    background: linear-gradient(to right, #e38b52, #ed0342); }
   .btn-gradient-danger:hover {
     opacity: .8; }
   .btn-gradient-danger:not(.btn-gradient-light) {
@@ -13282,7 +13282,7 @@ code {
       background: initial; }
     .dropdown .dropdown-menu .dropdown-item:hover {
       background-color: #f8f9fa;
-      color: #ffffff; }
+      color: #19232f; }
 
 /* Forms */
 .form-group {
@@ -13897,6 +13897,7 @@ dl {
           position: absolute;
           font-size: 0.9rem;
           margin-top: 0;
+          margin-left: -100px;
           padding: 0; }
           .rtl .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .dropdown-menu.navbar-dropdown {
             right: auto;
@@ -14525,6 +14526,34 @@ dl {
   animation: blink 1s infinite; /* Yanıp sönme efekti */
 }
 
+.modal-buttons button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  
+}
+
+.modalCheckNotif-content {
+  position: relative;
+  color: white;
+  background-color: darkslategrey;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 650px;
+  margin: 10% auto;
+  text-align: center;
+  max-height: max-content;
+}
+
+.loginButtonDiv {
+    display: flex;
+    justify-content: space-between; /* Elemanları sağa ve sola yasla */
+    align-items: center;
+}
+
 /* Yanıp sönme animasyonu */
 @keyframes blink {
   0%, 50% {
@@ -14563,5 +14592,8 @@ dl {
   background-color: darkgrey;
 }
 
+.table_btn {
+  margin: 4px;
+}
 
 /*# sourceMappingURL=style.css.map */

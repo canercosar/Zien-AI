@@ -44,60 +44,37 @@
             </a>
             <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown" id="dynamicDropdownMenu"></div>
           </li>
-          <li class="nav-item d-none d-lg-block full-screen-link">
-            <a class="nav-link">
-              <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
-            </a>
-          </li>
+
           <li class="nav-item dropdown">
             <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
-              data-bs-toggle="dropdown">
-              <i class="mdi mdi-bell-outline"></i>
+              data-bs-toggle="dropdown" onclick="toggleBellIcon()">
+              <i class="mdi mdi-bell-outline" id="notificationIcon"></i>
               <span class="count-symbol bg-danger"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
               aria-labelledby="notificationDropdown">
-              <h6 class="p-3 mb-0">Notifications</h6>
+              <h6 class="p-3 mb-0">Bildirimler</h6>
+              <div class="dropdown-divider"></div>
+
+              <!-- Dinamik olarak doldurulacak bildirimler -->
+              <div id="notificationList">
+                <!-- Bildirimler JavaScript ile buraya eklenecek -->
+              </div>
+
               <div class="dropdown-divider"></div>
               <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-success">
-                    <i class="mdi mdi-calendar"></i>
-                  </div>
-                </div>
                 <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject font-weight-normal mb-1">Event today</h6>
-                  <p class="text-gray ellipsis mb-0"> Just a reminder that you have an event today </p>
+                  <h6 class="preview-subject font-weight-normal mb-1"
+                    onclick="loadContent('pages/bildirim/bildirim.html')">Tüm Bildirimleri Gör</h6>
                 </div>
               </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-warning">
-                    <i class="mdi mdi-settings"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject font-weight-normal mb-1">Settings</h6>
-                  <p class="text-gray ellipsis mb-0"> Update dashboard </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-info">
-                    <i class="mdi mdi-link-variant"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject font-weight-normal mb-1">Launch Admin</h6>
-                  <p class="text-gray ellipsis mb-0"> New admin wow! </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <h6 class="p-3 mb-0 text-center">See all notifications</h6>
             </div>
           </li>
+          <!-- <li class="nav-item d-none d-lg-block full-screen-link">
+            <a class="nav-link">
+              <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
+            </a>
+          </li> -->
           <li class="nav-item nav-logout d-none d-lg-block">
             <a class="nav-link" href="javascript:void(0);" onclick="logout()">
               <i class="mdi mdi-power"></i>
@@ -229,7 +206,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-12 grid-margin">
+            <div class="col-md-7 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">Kamera Statüleri</h4>
@@ -240,8 +217,6 @@
                           <th> Kamera RTSP </th>
                           <th> Şirket Kodu </th>
                           <th> Departman </th>
-                          <th> RTSP Kullanıcısı </th>
-                          <th> RTSP Parola </th>
                         </tr>
                       </thead>
                       <tbody id="cameraTableBody">
@@ -252,9 +227,17 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-7 grid-margin stretch-card">
+
+            <div class="col-md-5 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Kamera Durumu</h4>
+                  <canvas id="traffic-chart"></canvas>
+                  <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left pt-4"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5 grid-margin stretch-card" style="display: none;">
               <div class="card">
                 <div class="card-body">
                   <div class="clearfix">
@@ -263,15 +246,6 @@
                       class="rounded-legend legend-horizontal legend-top-right float-right"></div>
                   </div>
                   <canvas id="visit-sale-chart" class="mt-4"></canvas>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-5 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Kamera Durumu</h4>
-                  <canvas id="traffic-chart"></canvas>
-                  <div id="traffic-chart-legend" class="rounded-legend legend-vertical legend-bottom-left pt-4"></div>
                 </div>
               </div>
             </div>

@@ -20,15 +20,15 @@ class NotificationHandler {
 					.then((currentToken) => {
 						if (currentToken) {
 							this._currentTokenFCM = currentToken;
-							console.log('Current token for client: ', currentToken);
+							// console.log('Current token for client: ', currentToken);
 						} else {
-							console.log('No registration token available.');
+							// console.log('No registration token available.');
 						}
 					}).catch((err) => {
 						console.error('An error occurred while retrieving token: ', err);
 					});
 			} else {
-				console.log('Unable to get permission to notify.');
+				// console.log('Unable to get permission to notify.');
 			}
 		});
 	}
@@ -38,7 +38,7 @@ class NotificationHandler {
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('./firebase-messaging-sw.js')
 		.then((registration) => {
-			console.log('Service worker registered:', registration);
+			// console.log('Service worker registered:', registration);
 		})
 		.catch((error) => {
 			console.error('Error registering service worker:', error);
