@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
 // Firebase yapılandırma bilgilerini buraya ekleyin
 const firebaseConfig = {
@@ -18,14 +18,14 @@ const modal = document.getElementById("statusErrorsModal");
 
 loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  
+
   const email = document.getElementById("formInputEmail").value;
   const password = document.getElementById("formInputPassword").value;
-  
+
   try {
     // Kullanıcı girişi için Firebase kimlik doğrulama
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    
+
     // Giriş başarılı
     window.location.href = "../../index.html";
     localStorage.setItem("userId", userCredential.user.uid)
@@ -35,6 +35,32 @@ loginForm.addEventListener("submit", async (event) => {
     statusErrorsModal.show();
   }
 });
+
+window.sendPasswordReset = () => {
+  const email = document.getElementById("formInputEmail").value;
+  if (email) {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        // document.getElementById("message").textContent = "Şifre sıfırlama bağlantısı gönderildi!";
+        document.getElementById("resetModal").style.display = "block";
+      })
+      .catch((error) => {
+        document.getElementById("emailWarningModal").style.display = "block";
+        
+      });
+  } else {
+    const emailInput = document.getElementById("formInputEmail");
+    const emailError = document.getElementById("emailError");
+
+    emailInput.classList.add("emailError");
+    emailError.style.display = "block";
+  }
+}
+
+window.closeModal = () => {
+  document.getElementById("resetModal").style.display = "none";
+  document.getElementById("emailWarningModal").style.display = "none";
+}
 
 // Kullanıcı sayfanın herhangi bir yerine tıkladığında modalı kapat
 window.onclick = (event) => {

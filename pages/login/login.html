@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>ZIEN AI</title>
   <link rel="stylesheet" href="../../assets/css/style.css">
-  <link rel="shortcut icon" href="../../assets/images/ZIENminik.png" />
+  <link rel="shortcut icon" href="../../assets/images/faviconzien.png" />
 </head>
 
 <body>
@@ -17,13 +17,14 @@
           <div class="col-lg-4 mx-auto">
             <div class="auth-form-light text-left p-5">
               <div class="brand-logo">
-                <img src="../../assets/images/zienlogo.png">
+                <img src="../../assets/images/ziemini_logo.png">
               </div>
               <h4>Giriş Yap</h4>
               <h6 class="font-weight-light">Devam etmek için oturum açın..</h6>
               <form id="login-form" class="pt-3">
                 <div class="form-group">
                   <input type="email" class="form-control form-control-lg" id="formInputEmail" placeholder="Username">
+                  <div id="emailError"  style="display: none;" class="error-message">Lütfen e-posta adresinizi girin.</div>
                 </div>
                 <div class="form-group">
                   <input type="password" class="form-control form-control-lg" id="formInputPassword"
@@ -32,7 +33,7 @@
                 <div class="loginButtonDiv">
                   <button class="btn btn-gradient-danger btn-fw btn-lg font-weight-medium auth-form-btn btn-rounded"
                     type="submit">Giriş Yap</button>
-                  <a href="#" class="auth-link text-black">Şifremi Unuttum</a>
+                  <a onclick="sendPasswordReset()" class="auth-link text-black">Şifremi Unuttum</a>
                 </div>
                 <div class="my-2 d-flex justify-content-between align-items-center">
                   <!-- <div class="form-check">
@@ -70,6 +71,21 @@
           <button type="button" class="btn btn-sm mt-3 btn-danger" data-bs-dismiss="modal">Tamam</button>
         </div>
       </div>
+    </div>
+  </div>
+  <div id="resetModal" class="resetModal" style="display: none;">
+    <!-- Modal İçerik -->
+    <div class="resetModal-content">
+      <span class="close-button" onclick="closeModal()">&times;</span>
+      <h2>Şifre Sıfırlama</h2>
+      <p>Şifre sıfırlama bağlantısı e-posta adresinize gönderildi!</p>
+    </div>
+  </div>
+  <div id="emailWarningModal" class="resetModal">
+    <div class="resetModal-content">
+      <span class="close-button" onclick="closeModal()">&times;</span>
+      <h2>Uyarı</h2>
+      <p>Lütfen geçerli bir e-posta adresinizi girin veya girdiğiniz e-postayı kontrol ediniz!</p>
     </div>
   </div>
   <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
