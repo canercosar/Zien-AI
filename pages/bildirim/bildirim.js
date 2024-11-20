@@ -127,6 +127,8 @@ function openRecheckModal(imageUrl, notif) {
 }
 
 async function handleButtonClick(notif, isConfirmed) {
+  const loadingOverlay = document.getElementById('loadingNotif');
+  loadingOverlay.style.display = 'flex';
   notif.isCheck = true; // `isCheck` alanını true olarak günceller
   notif.isFire = isConfirmed; // `isFire` alanını buton durumuna göre ayarlar
 
@@ -153,6 +155,7 @@ async function handleButtonClick(notif, isConfirmed) {
 
   // Sayfayı yeniden yüklemek veya tabloyu güncellemek için fonksiyonu çağırın
   NotifTablePage([logData]); // Örnek olarak sadece logData'yı günceller
+  loadingOverlay.style.display = 'none';
 }
 
 // Modal'ın dışına tıklanınca kapatmak için işlev

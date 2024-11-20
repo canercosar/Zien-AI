@@ -28,13 +28,20 @@ if ('serviceWorker' in navigator) {
 }
 
 messaging.onMessage((payload) => {
+  const NotifData = payload.data;
   const alertSound = document.getElementById("alertSound");
   alertSound.play();
   const modal = document.getElementById("fireAlertModal");
   const firePhoto = document.getElementById("firePhoto");
 
-  firePhoto.src = payload.data.imageUrl;
+  firePhoto.src = NotifData.imageUrl;
   modal.style.display = "block";
+
+  const confirmButton = document.getElementById("yesButtonNotif");
+  const notConfirmButton = document.getElementById("noButtonNotif");
+
+  confirmButton.onclick = () => handleButtonClick(NotifData, true);
+  notConfirmButton.onclick = () => handleButtonClick(NotifData, false);
 });
 
 
@@ -224,7 +231,7 @@ window.loadContent = (page) => {
           activeLink.classList.add('activeLinkC');
         }
         loadingOverlay.style.display = 'none';
-      }, 300);
+      }, 100);
     })
     .catch(error => {
       document.getElementById("main-content").innerHTML = "<p>İçerik yüklenemedi: " + error.message + "</p>";
@@ -270,6 +277,33 @@ window.toggleBellIcon = () => {
     icon.classList.remove("mdi-bell");
     icon.classList.add("mdi-bell-outline");
   }
+}
+
+async function handleButtonClick(notif, isConfirmed) {
+  notif.isCheck = true; // `isCheck` alanını true olarak günceller
+  notif.isFire = isConfirmed; // `isFire` alanını buton durumuna göre ayarlar
+
+  const logData = {
+    id: notif.id,
+    timestamp: new Date().toISOString(),
+    isCheck: notif.isCheck,
+    isFire: notif.isFire, // `isFire` alanını ekler
+    companyCode: notif.companyCode,
+    logId: notif.logId,
+    imagePath: notif.imagePath,
+    imageUrl: notif.imageUrl,
+    industryZoneId: notif.industryZoneId
+  };
+
+  try {
+    // Güncellenmiş veriyi Firebase'e kaydeder
+    await fnSetLogs(logData)
+    const fireAlertModal = document.getElementById("fireAlertModal");
+    fireAlertModal.style.display = "none";
+  } catch (error) {
+
+  }
+
 }
 
 function closeModal(choice) {
