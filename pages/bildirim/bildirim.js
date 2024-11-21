@@ -24,6 +24,9 @@ function NotifTablePage(notification) {
         row.style.boxShadow = "2px 2px 8px rgba(205, 0, 0, 0.3)"; // Hafif kırmızı gölge ekler
         row.style.borderRadius = "4px"; // Hafif yuvarlatma
       }
+      const idCell = document.createElement("td");
+      idCell.textContent = notif.id;
+      row.appendChild(idCell);
 
       // Görsel Hücresi
       const imageCell = document.createElement("td");
