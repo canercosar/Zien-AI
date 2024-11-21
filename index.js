@@ -110,7 +110,7 @@ if (userId) {
   document.getElementById('companyName').textContent = aCurrentUserCompanyDetail[0].companyName;
 
   document.getElementById('cameraCount').textContent = aCurrentCameras?.length;
-  document.getElementById('activeCameraCount').textContent = aCurrentCameras?.length;
+  document.getElementById('activeCameraCount').textContent = "17";
 
   if (aCurrentUser[0].userPhoto !== "") {
     document.getElementById("profilePhotoDiv").style.display = "inline";
